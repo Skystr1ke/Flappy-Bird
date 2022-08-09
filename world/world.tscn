@@ -1,0 +1,100 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://bird/bird.tscn" type="PackedScene" id=1]
+[ext_resource path="res://world/world.gd" type="Script" id=2]
+[ext_resource path="res://04b_19.tres" type="DynamicFont" id=3]
+[ext_resource path="res://pipe/pipe_spawner.tscn" type="PackedScene" id=4]
+[ext_resource path="res://world/countdown/countdown.gd" type="Script" id=5]
+[ext_resource path="res://world/countdown/countdown.png" type="Texture" id=6]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 10, 5 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 5 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "Countdown"
+length = 3.0
+step = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("Sprite")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "queue_free"
+} ]
+}
+
+[node name="World" type="Node2D" groups=["World"]]
+pause_mode = 2
+script = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 320.0
+margin_bottom = 180.0
+color = Color( 0.352941, 0.372549, 0.85098, 1 )
+
+[node name="Bird" parent="." instance=ExtResource( 1 )]
+pause_mode = 1
+position = Vector2( 50, 90 )
+
+[node name="PipeSpawner" parent="." instance=ExtResource( 4 )]
+pause_mode = 1
+position = Vector2( 340, 0 )
+
+[node name="DeathChecker" type="Area2D" parent="."]
+pause_mode = 1
+position = Vector2( 50, 185 )
+
+[node name="TopCollision" type="CollisionShape2D" parent="DeathChecker"]
+position = Vector2( 0, -190 )
+shape = SubResource( 2 )
+
+[node name="BottomCollision" type="CollisionShape2D" parent="DeathChecker"]
+shape = SubResource( 1 )
+
+[node name="Score" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="Score"]
+anchor_right = 1.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 3 )
+text = "0"
+align = 1
+valign = 1
+
+[node name="Countdown" type="Node2D" parent="."]
+position = Vector2( 160, 90 )
+script = ExtResource( 5 )
+
+[node name="Sprite" type="Sprite" parent="Countdown"]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 6 )
+hframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Countdown"]
+autoplay = "Countdown"
+anims/Countdown = SubResource( 3 )
+
+[connection signal="area_entered" from="Bird" to="." method="_on_Bird_area_entered"]
+[connection signal="animation_finished" from="Countdown/AnimationPlayer" to="Countdown" method="_on_AnimationPlayer_animation_finished"]
+[connection signal="animation_started" from="Countdown/AnimationPlayer" to="Countdown" method="_on_AnimationPlayer_animation_started"]
