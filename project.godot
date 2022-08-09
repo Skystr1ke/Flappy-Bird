@@ -8,16 +8,6 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "",
-"class": "GitAPI",
-"language": "NativeScript",
-"path": "res://addons/godot-git-plugin/git_api.gdns"
-} ]
-_global_script_class_icons={
-"GitAPI": ""
-}
-
 [application]
 
 config/name="Flappy Bird"
@@ -26,6 +16,10 @@ boot_splash/image="res://icon.png"
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
+
+[autoload]
+
+Quit="*res://autoload/quit.gd"
 
 [display]
 

@@ -1,9 +1,6 @@
 extends Popup
 
 onready var _button := $Button as Button
-onready var _button_scale_animator := create_tween() \
-		.set_trans(Tween.TRANS_LINEAR) \
-		.set_ease(Tween.EASE_IN_OUT)
 
 
 func _ready() -> void:
@@ -17,8 +14,12 @@ func _on_Button_pressed() -> void:
 
 
 func _on_Button_mouse_entered() -> void:
-	_button_scale_animator.tween_property(_button, "rect_scale", Vector2(2, 2), 0.1)
+	create_tween().tween_property(_button, "rect_scale", Vector2(2, 2), 0.1) \
+			.set_trans(Tween.TRANS_LINEAR) \
+			.set_ease(Tween.EASE_IN_OUT)
 
 
 func _on_Button_mouse_exited() -> void:
-	_button_scale_animator.tween_property(_button, "rect_scale", Vector2(1.5, 1.5), 0.1)
+	create_tween().tween_property(_button, "rect_scale", Vector2(1.5, 1.5), 0.1) \
+			.set_trans(Tween.TRANS_LINEAR) \
+			.set_ease(Tween.EASE_IN_OUT)
